@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 720" width="1120" height="720" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1120" height="720" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <text x="560" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">UART Transmitter &amp; Receiver Architecture (8N1, 9600 Baud)</text>
+  <text x="560" y="52" text-anchor="middle" font-size="13" fill="#475569">Top-Level Module: uart_top | 100 MHz System Clock | 16x RX Oversampling | Synchronous Reset</text>
+
+  <!-- Top-Level Container -->
+  <rect x="120" y="68" width="870" height="610" rx="12" fill="#ffffff" stroke="#334155" stroke-width="2" stroke-dasharray="8 5"/>
+  <text x="140" y="92" font-size="14" font-weight="700" fill="#334155">uart_top</text>
+
+  <!-- Clock & Reset Horizontal Buses -->
+  <line x1="25" y1="108" x2="730" y2="108" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <text x="30" y="102" font-size="13" font-weight="600" fill="#334155">clk</text>
+  <line x1="25" y1="126" x2="710" y2="126" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <text x="30" y="120" font-size="13" font-weight="600" fill="#334155">rst</text>
+
+  <!-- Clock/Reset taps to baud_rate_gen -->
+  <circle cx="530" cy="108" r="2.8" fill="#64748b"/>
+  <line x1="530" y1="108" x2="530" y2="146" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrow)"/>
+  <circle cx="570" cy="126" r="2.8" fill="#94a3b8"/>
+  <line x1="570" y1="126" x2="570" y2="146" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arrow)"/>
+
+  <!-- Clock/Reset vertical bus down left side -->
+  <circle cx="150" cy="108" r="2.8" fill="#64748b"/>
+  <line x1="150" y1="108" x2="150" y2="520" stroke="#64748b" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <circle cx="165" cy="126" r="2.8" fill="#94a3b8"/>
+  <line x1="165" y1="126" x2="165" y2="540" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+  <!-- Taps to tx_ctrl & uart_rx -->
+  <line x1="150" y1="305" x2="188" y2="305" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="165" y1="322" x2="188" y2="322" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="150" y1="520" x2="188" y2="520" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="165" y1="540" x2="188" y2="540" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- 1. Baud Rate Generator -->
+  <rect x="405" y="148" width="290" height="88" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+  <text x="550" y="172" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">baud_rate_gen</text>
+  <text x="550" y="191" text-anchor="middle" font-size="11.5" fill="#475569">100 MHz -&gt; 9600 Baud (Fixed)</text>
+  <text x="550" y="212" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#1e293b">DIV=651 (16x sample_tick) | /16 (baud_tick)</text>
+
+  <!-- baud_tick -> tx_ctrl -->
+  <path d="M 405 192 L 310 192 L 310 278" fill="none" stroke="#d97706" stroke-width="1.9" marker-end="url(#arrow-amber)"/>
+  <text x="355" y="185" text-anchor="middle" font-size="11.5" font-weight="600" fill="#b45309">baud_tick (9600 Hz)</text>
+
+  <!-- sample_tick -> rx_ctrl -->
+  <path d="M 695 192 L 920 192 L 920 458 L 730 458 L 730 488" fill="none" stroke="#d97706" stroke-width="1.9" marker-end="url(#arrow-amber)"/>
+  <text x="815" y="185" text-anchor="middle" font-size="11.5" font-weight="600" fill="#b45309">sample_tick (153.6 kHz, 16x)</text>
+
+  <!-- 2. Transmitter Control Logic -->
+  <rect x="190" y="280" width="240" height="135" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="310" y="305" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">tx_ctrl</text>
+  <text x="310" y="324" text-anchor="middle" font-size="11.5" fill="#475569">Transmitter Control FSM</text>
+  <rect x="206" y="336" width="208" height="66" rx="5" fill="#ffffff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="310" y="355" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#1e293b">IDLE -&gt; WAIT -&gt; START -&gt; DATA -&gt; STOP</text>
+  <text x="310" y="375" text-anchor="middle" font-size="11" fill="#64748b">Bit counter (0..7) | Status flags</text>
+  <text x="310" y="392" text-anchor="middle" font-size="11" fill="#64748b">tx_busy, tx_done</text>
+
+  <!-- 3. UART Transmitter Datapath -->
+  <rect x="590" y="280" width="280" height="135" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="730" y="305" text-anchor="middle" font-size="14" font-weight="700" fill="#14532d">uart_tx</text>
+  <text x="730" y="324" text-anchor="middle" font-size="11.5" fill="#475569">UART Transmitter Datapath</text>
+  <rect x="606" y="336" width="248" height="66" rx="5" fill="#ffffff" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="730" y="357" text-anchor="middle" font-size="11.5" font-family="Consolas, monospace" fill="#1e293b">tx_shift_reg [7:0] (LSB first)</text>
+  <text x="730" y="377" text-anchor="middle" font-size="11.5" font-family="Consolas, monospace" fill="#1e293b">Mux: 1 | 0 | shift_reg[0] | 1</text>
+  <text x="730" y="394" text-anchor="middle" font-size="10.5" fill="#64748b">(Registered glitch-free tx output)</text>
+
+  <!-- External TX Inputs (Left) -->
+  <line x1="25" y1="360" x2="188" y2="360" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="30" y="353" font-size="13" font-weight="600" fill="#1d4ed8">tx_start</text>
+
+  <path d="M 25 440 L 730 440 L 730 417" fill="none" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"/>
+  <text x="30" y="432" font-size="13" font-weight="600" fill="#1d4ed8">tx_data [7:0]</text>
+
+  <!-- tx_ctrl -> uart_tx signals -->
+  <line x1="430" y1="322" x2="588" y2="322" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+  <text x="510" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#1d4ed8">tx_load</text>
+
+  <line x1="430" y1="354" x2="588" y2="354" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+  <text x="510" y="347" text-anchor="middle" font-size="11" font-weight="600" fill="#1d4ed8">tx_shift_en</text>
+
+  <line x1="430" y1="386" x2="588" y2="386" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+  <text x="510" y="379" text-anchor="middle" font-size="11" font-weight="600" fill="#1d4ed8">tx_bit_sel [1:0]</text>
+
+  <!-- External TX Outputs (Right) -->
+  <path d="M 430 292 L 455 292 L 455 256 L 1085 256" fill="none" stroke="#2563eb" stroke-width="1.7" marker-end="url(#arrow-blue)"/>
+  <text x="1008" y="249" font-size="13" font-weight="600" fill="#1d4ed8">tx_busy</text>
+
+  <path d="M 430 304 L 468 304 L 468 272 L 1085 272" fill="none" stroke="#2563eb" stroke-width="1.7" marker-end="url(#arrow-blue)"/>
+  <text x="1008" y="290" font-size="13" font-weight="600" fill="#1d4ed8">tx_done</text>
+
+  <line x1="870" y1="348" x2="1085" y2="348" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="1008" y="340" font-size="13" font-weight="700" fill="#15803d">tx (8N1)</text>
+
+  <!-- 4. UART Receiver Datapath -->
+  <rect x="190" y="490" width="240" height="135" rx="8" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  <text x="310" y="515" text-anchor="middle" font-size="14" font-weight="700" fill="#134e4a">uart_rx</text>
+  <text x="310" y="534" text-anchor="middle" font-size="11.5" fill="#475569">UART Receiver Datapath</text>
+  <rect x="206" y="546" width="208" height="66" rx="5" fill="#ffffff" stroke="#99f6e4" stroke-width="1"/>
+  <text x="310" y="566" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#1e293b">2-FF Sync -&gt; rx_sync</text>
+  <text x="310" y="585" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#1e293b">rx_shift_reg [7:0] (LSB first)</text>
+  <text x="310" y="603" text-anchor="middle" font-size="10.5" fill="#64748b">Latches rx_data [7:0] on valid stop</text>
+
+  <!-- 5. Receiver Control Logic -->
+  <rect x="590" y="490" width="280" height="135" rx="8" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="730" y="515" text-anchor="middle" font-size="14" font-weight="700" fill="#312e81">rx_ctrl</text>
+  <text x="730" y="534" text-anchor="middle" font-size="11.5" fill="#475569">Receiver Control FSM (16x Oversample)</text>
+  <rect x="606" y="546" width="248" height="66" rx="5" fill="#ffffff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="730" y="566" text-anchor="middle" font-size="11" font-family="Consolas, monospace" fill="#1e293b">IDLE -&gt; START (7) -&gt; DATA (15) -&gt; STOP</text>
+  <text x="730" y="585" text-anchor="middle" font-size="11" fill="#64748b">Start-edge detect | Stop-bit check</text>
+  <text x="730" y="603" text-anchor="middle" font-size="11" fill="#64748b">rx_busy, rx_done, rx_error</text>
+
+  <!-- External RX Input (Left) -->
+  <line x1="25" y1="575" x2="188" y2="575" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <text x="30" y="567" font-size="13" font-weight="700" fill="#0f766e">rx (8N1)</text>
+
+  <!-- uart_rx <-> rx_ctrl internal wires -->
+  <line x1="430" y1="525" x2="588" y2="525" stroke="#0d9488" stroke-width="1.8" marker-end="url(#arrow-teal)"/>
+  <text x="510" y="518" text-anchor="middle" font-size="11" font-weight="600" fill="#0f766e">rx_sync</text>
+
+  <line x1="590" y1="562" x2="432" y2="562" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="510" y="555" text-anchor="middle" font-size="11" font-weight="600" fill="#4338ca">rx_shift_en</text>
+
+  <line x1="590" y1="596" x2="432" y2="596" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="510" y="589" text-anchor="middle" font-size="11" font-weight="600" fill="#4338ca">rx_latch_data</text>
+
+  <!-- External RX Outputs (Right) -->
+  <line x1="870" y1="525" x2="1085" y2="525" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="1008" y="518" font-size="13" font-weight="600" fill="#4338ca">rx_busy</text>
+
+  <line x1="870" y1="560" x2="1085" y2="560" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="1008" y="553" font-size="13" font-weight="600" fill="#4338ca">rx_done</text>
+
+  <line x1="870" y1="595" x2="1085" y2="595" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="1008" y="588" font-size="13" font-weight="600" fill="#4338ca">rx_error</text>
+
+  <path d="M 310 625 L 310 652 L 1085 652" fill="none" stroke="#0d9488" stroke-width="2.4" marker-end="url(#arrow-teal)"/>
+  <text x="1008" y="644" font-size="13" font-weight="600" fill="#0f766e">rx_data [7:0]</text>
+
+  <!-- Footer -->
+  <text x="560" y="704" text-anchor="middle" font-size="11.5" fill="#64748b">6 RTL Modules: uart_top, baud_rate_gen, tx_ctrl, uart_tx, rx_ctrl, uart_rx | Frame: 1 Start + 8 Data (LSB First) + 1 Stop</text>
+</svg>

@@ -1,0 +1,23 @@
+# Vivado & XSIM build artifacts
+*.jou
+*.log
+*.str
+*.pb
+*.wdb
+*.vcd
+*.dcp
+.Xil/
+xsim.dir/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+synthesis/vivado_project/
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
